@@ -14,8 +14,7 @@
   "name": "centamiv/spreadsheet_excel_writer_php7",
   "type": "library",
   "require": {
-    "pear/pear": "*",
+    "pear/pear": "dev-master",
     "php": ">=5.3.3"
-  },
-  "minimum-stability": "dev"
+  }
 }
