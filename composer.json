@@ -16,5 +16,6 @@
   "require": {
     "pear/pear": "dev-master",
     "php": ">=5.3.3"
-  }
+  },
+  "minimum-stability": "dev"
 }
