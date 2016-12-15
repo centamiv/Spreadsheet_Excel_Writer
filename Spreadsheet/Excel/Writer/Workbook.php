@@ -32,20 +32,12 @@
 *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-if (!class_exists('Spreadsheet_Excel_Writer_BIFFwriter')) {
-    require_once 'Spreadsheet/Excel/Writer/Format.php';
-    require_once 'Spreadsheet/Excel/Writer/BIFFwriter.php';
-    require_once 'Spreadsheet/Excel/Writer/Worksheet.php';
-    require_once 'Spreadsheet/Excel/Writer/Parser.php';
-}
-
-if (!class_exists('OLE_PPS_Root')) {
-    require_once 'OLE/PPS/Root.php';
-}
-
-if (!class_exists('OLE_PPS_File')) {
-    require_once 'OLE/PPS/File.php';
-}
+require_once 'Spreadsheet/Excel/Writer/Format.php';
+require_once 'Spreadsheet/Excel/Writer/BIFFwriter.php';
+require_once 'Spreadsheet/Excel/Writer/Worksheet.php';
+require_once 'Spreadsheet/Excel/Writer/Parser.php';
+require_once 'OLE/PPS/Root.php';
+require_once 'OLE/PPS/File.php';
 
 /**
 * Class for generating Excel Spreadsheets
@@ -61,120 +53,117 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * Filename for the Workbook
     * @var string
     */
-    public $_filename;
+    var $_filename;
 
     /**
     * Formula parser
-    * @var Spreadsheet_Excel_Writer_Parser
+    * @var object Parser
     */
-    public $_parser;
+    var $_parser;
 
     /**
     * Flag for 1904 date system (0 => base date is 1900, 1 => base date is 1904)
     * @var integer
     */
-    public $_1904;
+    var $_1904;
 
     /**
     * The active worksheet of the workbook (0 indexed)
     * @var integer
     */
-    public $_activesheet;
+    var $_activesheet;
 
     /**
     * 1st displayed worksheet in the workbook (0 indexed)
     * @var integer
     */
-    public $_firstsheet;
+    var $_firstsheet;
 
     /**
     * Number of workbook tabs selected
     * @var integer
     */
-    public $_selected;
+    var $_selected;
 
     /**
     * Index for creating adding new formats to the workbook
     * @var integer
     */
-    public $_xf_index;
+    var $_xf_index;
 
     /**
     * Flag for preventing close from being called twice.
     * @var integer
     * @see close()
     */
-    public $_fileclosed;
+    var $_fileclosed;
 
     /**
     * The BIFF file size for the workbook.
     * @var integer
     * @see _calcSheetOffsets()
     */
-    public $_biffsize;
+    var $_biffsize;
 
     /**
     * The default sheetname for all sheets created.
     * @var string
     */
-    public $_sheetname;
+    var $_sheetname;
 
     /**
     * The default XF format.
-    * @var Spreadsheet_Excel_Writer_Format
+    * @var object Format
     */
-    public $_tmp_format;
+    var $_tmp_format;
 
     /**
     * Array containing references to all of this workbook's worksheets
     * @var array
     */
-    public $_worksheets;
+    var $_worksheets;
 
     /**
     * Array of sheetnames for creating the EXTERNSHEET records
     * @var array
     */
-    public $_sheetnames;
+    var $_sheetnames;
 
     /**
     * Array containing references to all of this workbook's formats
     * @var array
     */
-    public $_formats;
+    var $_formats;
 
     /**
     * Array containing the colour palette
     * @var array
     */
-    public $_palette;
+    var $_palette;
 
     /**
     * The default format for URLs.
-    * @var Spreadsheet_Excel_Writer_Format
+    * @var object Format
     */
-    public $_url_format;
+    var $_url_format;
 
     /**
     * The codepage indicates the text encoding used for strings
     * @var integer
     */
-    public $_codepage;
+    var $_codepage;
 
     /**
     * The country code used for localization
     * @var integer
     */
-    public $_country_code;
+    var $_country_code;
 
     /**
     * number of bytes for sizeinfo of strings
     * @var integer
     */
-    public $_string_sizeinfo_size;
-
-    /** @var int */
-    public $_timestamp;
+    var $_string_sizeinfo_size;
 
     /**
     * Class constructor
@@ -182,7 +171,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @param string filename for storing the workbook. "-" for writing to stdout.
     * @access public
     */
-    public function __construct($filename)
+    function __construct($filename)
     {
         // It needs to call its parent's constructor explicitly
         parent::__construct();
@@ -207,12 +196,10 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
         $this->_string_sizeinfo  = 3;
 
         // Add the default format for hyperlinks
-        $this->_url_format = $this->addFormat(array('color' => 'blue', 'underline' => 1));
+        $this->_url_format =& $this->addFormat(array('color' => 'blue', 'underline' => 1));
         $this->_str_total       = 0;
         $this->_str_unique      = 0;
         $this->_str_table       = array();
-        $this->_timestamp       = time();
-
         $this->_setPaletteXl97();
     }
 
@@ -223,7 +210,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @access public
     * @return mixed true on success. PEAR_Error on failure
     */
-    public function close()
+    function close()
     {
         if ($this->_fileclosed) { // Prevent close() from being called twice.
             return true;
@@ -245,7 +232,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @see worksheets()
     * @return array
     */
-    public function sheets()
+    function sheets()
     {
         return $this->worksheets();
     }
@@ -257,14 +244,14 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @access public
     * @return array
     */
-    public function worksheets()
+    function worksheets()
     {
         return $this->_worksheets;
     }
 
     /**
     * Sets the BIFF version.
-    * This method exists just to access experimental public functionality
+    * This method exists just to access experimental functionality
     * from BIFF8. It will be deprecated !
     * Only possible value is 8 (Excel 97/2000).
     * For any other value it fails silently.
@@ -272,7 +259,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @access public
     * @param integer $version The BIFF version
     */
-    public function setVersion($version)
+    function setVersion($version)
     {
         if ($version == 8) { // only accept version 8
             $version = 0x0600;
@@ -305,7 +292,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @param integer $code Is the international calling country code for the
     *                      chosen country.
     */
-    public function setCountry($code)
+    function setCountry($code)
     {
         $this->_country_code = $code;
     }
@@ -320,7 +307,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @return mixed reference to a worksheet object on success, PEAR_Error
     *               on failure
     */
-    public function addWorksheet($name = '')
+    function &addWorksheet($name = '')
     {
         $index     = count($this->_worksheets);
         $sheetname = $this->_sheetname;
@@ -356,7 +343,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
                                    $this->_str_table, $this->_url_format,
                                    $this->_parser, $this->_tmp_dir);
 
-        $this->_worksheets[$index] = $worksheet;    // Store ref for iterator
+        $this->_worksheets[$index] = &$worksheet;    // Store ref for iterator
         $this->_sheetnames[$index] = $name;          // Store EXTERNSHEET names
         $this->_parser->setExtSheet($name, $index);  // Register worksheet name with parser
         return $worksheet;
@@ -368,13 +355,13 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access public
     * @param array $properties array with properties for initializing the format.
-    * @return Spreadsheet_Excel_Writer_Format
+    * @return &Spreadsheet_Excel_Writer_Format reference to an Excel Format
     */
-    public function addFormat($properties = array())
+    function &addFormat($properties = array())
     {
         $format = new Spreadsheet_Excel_Writer_Format($this->_BIFF_version, $this->_xf_index, $properties);
         $this->_xf_index += 1;
-        $this->_formats[] = $format;
+        $this->_formats[] = &$format;
         return $format;
     }
 
@@ -382,13 +369,11 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
      * Create new validator.
      *
      * @access public
-     * @return Spreadsheet_Excel_Writer_Validator
+     * @return &Spreadsheet_Excel_Writer_Validator reference to a Validator
      */
-    public function addValidator()
+    function &addValidator()
     {
-        if (!class_exists('Spreadsheet_Excel_Writer_Validator')) {
-            include_once 'Spreadsheet/Excel/Writer/Validator.php';
-        }
+        include_once 'Spreadsheet/Excel/Writer/Validator.php';
         /* FIXME: check for successful inclusion*/
         $valid = new Spreadsheet_Excel_Writer_Validator($this->_parser);
         return $valid;
@@ -404,7 +389,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @param integer $blue  blue RGB value [0-255]
     * @return integer The palette index for the custom color
     */
-    public function setCustomColor($index, $red, $green, $blue)
+    function setCustomColor($index, $red, $green, $blue)
     {
         // Match a HTML #xxyyzz style parameter
         /*if (defined $_[1] and $_[1] =~ /^#(\w\w)(\w\w)(\w\w)/ ) {
@@ -437,7 +422,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _setPaletteXl97()
+    function _setPaletteXl97()
     {
         $this->_palette = array(
                            array(0x00, 0x00, 0x00, 0x00),   // 8
@@ -506,7 +491,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @access private
     * @return mixed true on success. PEAR_Error on failure
     */
-    protected function _storeWorkbook()
+    function _storeWorkbook()
     {
         if (count($this->_worksheets) == 0) {
             return true;
@@ -582,12 +567,12 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @access private
     * @return mixed true on success. PEAR_Error on failure
     */
-    protected function _storeOLEFile()
+    function _storeOLEFile()
     {
         if($this->_BIFF_version == 0x0600) {
-            $OLE = new OLE_PPS_File(OLE::Asc2Ucs('Workbook'));
+            $OLE = new OLE_PPS_File((new OLE())->Asc2Ucs('Workbook'));
         } else {
-            $OLE = new OLE_PPS_File(OLE::Asc2Ucs('Book'));
+            $OLE = new OLE_PPS_File((new OLE())->Asc2Ucs('Book'));
         }
         if ($this->_tmp_dir != '') {
             $OLE->setTempDir($this->_tmp_dir);
@@ -605,7 +590,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
             }
         }
 
-        $root = new OLE_PPS_Root($this->_timestamp, $this->_timestamp, array($OLE));
+        $root = new OLE_PPS_Root(time(), time(), array($OLE));
         if ($this->_tmp_dir != '') {
             $root->setTempDir($this->_tmp_dir);
         }
@@ -622,7 +607,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _calcSheetOffsets()
+    function _calcSheetOffsets()
     {
         if ($this->_BIFF_version == 0x0600) {
             $boundsheet_length = 12;  // fixed length for a BOUNDSHEET record
@@ -661,7 +646,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeAllFonts()
+    function _storeAllFonts()
     {
         // tmp_format is added by the constructor. We use this to write the default XF's
         $format = $this->_tmp_format;
@@ -705,7 +690,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeAllNumFormats()
+    function _storeAllNumFormats()
     {
         // Leaning num_format syndrome
         $hash_num_formats = array();
@@ -753,7 +738,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeAllXfs()
+    function _storeAllXfs()
     {
         // _tmp_format is added by the constructor. We use this to write the default XF's
         // The default font index is 0
@@ -780,7 +765,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeAllStyles()
+    function _storeAllStyles()
     {
         $this->_storeStyle();
     }
@@ -791,7 +776,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeExterns()
+    function _storeExterns()
 
     {
         // Create EXTERNCOUNT with number of worksheets
@@ -808,7 +793,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeNames()
+    function _storeNames()
     {
         // Create the print area NAME records
         $total_worksheets = count($this->_worksheets);
@@ -888,7 +873,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeCodepage()
+    function _storeCodepage()
     {
         $record          = 0x0042;             // Record identifier
         $length          = 0x0002;             // Number of bytes to follow
@@ -905,7 +890,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeWindow1()
+    function _storeWindow1()
     {
         $record    = 0x003D;                 // Record identifier
         $length    = 0x0012;                 // Number of bytes to follow
@@ -938,7 +923,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @param integer $offset    Location of worksheet BOF
     * @access private
     */
-    protected function _storeBoundsheet($sheetname,$offset)
+    function _storeBoundsheet($sheetname,$offset)
     {
         $record    = 0x0085;                    // Record identifier
         if ($this->_BIFF_version == 0x0600) {
@@ -968,7 +953,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeSupbookInternal()
+    function _storeSupbookInternal()
     {
         $record    = 0x01AE;   // Record identifier
         $length    = 0x0004;   // Bytes to follow
@@ -985,7 +970,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @param string $sheetname Worksheet name
     * @access private
     */
-    protected function _storeExternsheetBiff8()
+    function _storeExternsheetBiff8()
     {
         $total_references = count($this->_parser->_references);
         $record   = 0x0017;                     // Record identifier
@@ -1005,7 +990,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeStyle()
+    function _storeStyle()
     {
         $record    = 0x0293;   // Record identifier
         $length    = 0x0004;   // Bytes to follow
@@ -1027,7 +1012,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @param integer $ifmt   Format index code
     * @access private
     */
-    protected function _storeNumFormat($format, $ifmt)
+    function _storeNumFormat($format, $ifmt)
     {
         $record    = 0x041E;                      // Record identifier
 
@@ -1065,7 +1050,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeDatemode()
+    function _storeDatemode()
     {
         $record    = 0x0022;         // Record identifier
         $length    = 0x0002;         // Bytes to follow
@@ -1091,7 +1076,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @param integer $cxals Number of external references
     * @access private
     */
-    protected function _storeExterncount($cxals)
+    function _storeExterncount($cxals)
     {
         $record   = 0x0016;          // Record identifier
         $length   = 0x0002;          // Number of bytes to follow
@@ -1112,7 +1097,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @param string $sheetname Worksheet name
     * @access private
     */
-    protected function _storeExternsheet($sheetname)
+    function _storeExternsheet($sheetname)
     {
         $record      = 0x0017;                     // Record identifier
         $length      = 0x02 + strlen($sheetname);  // Number of bytes to follow
@@ -1138,7 +1123,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @param integer $colmax End column
     * @access private
     */
-    protected function _storeNameShort($index, $type, $rowmin, $rowmax, $colmin, $colmax)
+    function _storeNameShort($index, $type, $rowmin, $rowmax, $colmin, $colmax)
     {
         $record          = 0x0018;       // Record identifier
         $length          = 0x0024;       // Number of bytes to follow
@@ -1204,7 +1189,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @param integer $colmax End column
     * @access private
     */
-    protected function _storeNameLong($index, $type, $rowmin, $rowmax, $colmin, $colmax)
+    function _storeNameLong($index, $type, $rowmin, $rowmax, $colmin, $colmax)
     {
         $record          = 0x0018;       // Record identifier
         $length          = 0x003d;       // Number of bytes to follow
@@ -1279,7 +1264,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeCountry()
+    function _storeCountry()
     {
         $record          = 0x008C;    // Record identifier
         $length          = 4;         // Number of bytes to follow
@@ -1295,7 +1280,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storePalette()
+    function _storePalette()
     {
         $aref            = $this->_palette;
 
@@ -1325,7 +1310,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _calculateSharedStringsSizes()
+    function _calculateSharedStringsSizes()
     {
         /* Iterate through the strings to calculate the CONTINUE block sizes.
            For simplicity we use the same size for the SST and CONTINUE records:
@@ -1471,7 +1456,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     *
     * @access private
     */
-    protected function _storeSharedStringsTable()
+    function _storeSharedStringsTable()
     {
         $record  = 0x00fc;  // Record identifier
         $length  = 0x0008;  // Number of bytes to follow

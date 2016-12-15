@@ -32,9 +32,7 @@
 *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-if (!class_exists('PEAR')) {
-    require_once 'PEAR.php';
-}
+require_once 'PEAR.php';
 
 /**
 * Class for writing Excel BIFF records.
@@ -59,51 +57,51 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
     * The BIFF/Excel version (5).
     * @var integer
     */
-    public $_BIFF_version = 0x0500;
+    var $_BIFF_version = 0x0500;
 
     /**
     * The byte order of this architecture. 0 => little endian, 1 => big endian
     * @var integer
     */
-    public $_byte_order;
+    var $_byte_order;
 
     /**
     * The string containing the data of the BIFF stream
     * @var string
     */
-    public $_data;
+    var $_data;
 
     /**
     * The size of the data in bytes. Should be the same as strlen($this->_data)
     * @var integer
     */
-    public $_datasize;
+    var $_datasize;
 
     /**
     * The maximun length for a BIFF record. See _addContinue()
     * @var integer
     * @see _addContinue()
     */
-    public $_limit;
+    var $_limit;
 
     /**
     * The temporary dir for storing the OLE file
     * @var string
     */
-    public $_tmp_dir;
+    var $_tmp_dir;
 
     /**
     * The temporary file for storing the OLE file
     * @var string
     */
-    public $_tmp_file;
+    var $_tmp_file;
 
     /**
     * Constructor
     *
     * @access public
     */
-    public function __construct()
+    function __construct()
     {
         $this->_byte_order = '';
         $this->_data       = '';
@@ -120,7 +118,7 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
     *
     * @access private
     */
-    protected function _setByteOrder()
+    function _setByteOrder()
     {
         // Check if "pack" gives the required IEEE 64bit float
         $teststr = pack("d", 1.2345);
@@ -138,12 +136,12 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
     }
 
     /**
-    * General storage public function
+    * General storage function
     *
     * @param string $data binary data to prepend
     * @access private
     */
-    protected function _prepend($data)
+    function _prepend($data)
     {
         if (strlen($data) > $this->_limit) {
             $data = $this->_addContinue($data);
@@ -153,12 +151,12 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
     }
 
     /**
-    * General storage public function
+    * General storage function
     *
     * @param string $data binary data to append
     * @access private
     */
-    protected function _append($data)
+    function _append($data)
     {
         if (strlen($data) > $this->_limit) {
             $data = $this->_addContinue($data);
@@ -175,7 +173,7 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
     *                       0x0010 Worksheet.
     * @access private
     */
-    protected function _storeBof($type)
+    function _storeBof($type)
     {
         $record  = 0x0809;        // Record identifier
 
@@ -204,7 +202,7 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
     *
     * @access private
     */
-    protected function _storeEof()
+    function _storeEof()
     {
         $record    = 0x000A;   // Record identifier
         $length    = 0x0000;   // Number of bytes to follow
@@ -217,14 +215,14 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
     * Excel 97 the limit is 8228 bytes. Records that are longer than these limits
     * must be split up into CONTINUE blocks.
     *
-    * This public function takes a long BIFF record and inserts CONTINUE records as
+    * This function takes a long BIFF record and inserts CONTINUE records as
     * necessary.
     *
     * @param  string  $data The original binary data to be written
     * @return string        A very convenient string of continue blocks
     * @access private
     */
-    protected function _addContinue($data)
+    function _addContinue($data)
     {
         $limit  = $this->_limit;
         $record = 0x003C;         // Record identifier
@@ -257,7 +255,7 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
     * @param string $dir The dir to be used as temp dir
     * @return true if given dir is valid, false otherwise
     */
-    public function setTempDir($dir)
+    function setTempDir($dir)
     {
         if (is_dir($dir)) {
             $this->_tmp_dir = $dir;
@@ -266,3 +264,4 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
         return false;
     }
 }
+?>

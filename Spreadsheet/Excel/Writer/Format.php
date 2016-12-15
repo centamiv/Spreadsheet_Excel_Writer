@@ -32,9 +32,7 @@
 *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-if (!class_exists('PEAR')) {
-    require_once 'PEAR.php';
-}
+require_once 'PEAR.php';
 
 /**
 * Class for generating Excel XF records (formats)
@@ -50,199 +48,199 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * The index given by the workbook when creating a new format.
     * @var integer
     */
-    public $_xf_index;
+    var $_xf_index;
 
     /**
     * Index to the FONT record.
     * @var integer
     */
-    public $font_index;
+    var $font_index;
 
     /**
     * The font name (ASCII).
     * @var string
     */
-    public $_font_name;
+    var $_font_name;
 
     /**
     * Height of font (1/20 of a point)
     * @var integer
     */
-    public $_size;
+    var $_size;
 
     /**
     * Bold style
     * @var integer
     */
-    public $_bold;
+    var $_bold;
 
     /**
     * Bit specifiying if the font is italic.
     * @var integer
     */
-    public $_italic;
+    var $_italic;
 
     /**
     * Index to the cell's color
     * @var integer
     */
-    public $_color;
+    var $_color;
 
     /**
     * The text underline property
     * @var integer
     */
-    public $_underline;
+    var $_underline;
 
     /**
     * Bit specifiying if the font has strikeout.
     * @var integer
     */
-    public $_font_strikeout;
+    var $_font_strikeout;
 
     /**
     * Bit specifiying if the font has outline.
     * @var integer
     */
-    public $_font_outline;
+    var $_font_outline;
 
     /**
     * Bit specifiying if the font has shadow.
     * @var integer
     */
-    public $_font_shadow;
+    var $_font_shadow;
 
     /**
     * 2 bytes specifiying the script type for the font.
     * @var integer
     */
-    public $_font_script;
+    var $_font_script;
 
     /**
     * Byte specifiying the font family.
     * @var integer
     */
-    public $_font_family;
+    var $_font_family;
 
     /**
     * Byte specifiying the font charset.
     * @var integer
     */
-    public $_font_charset;
+    var $_font_charset;
 
     /**
     * An index (2 bytes) to a FORMAT record (number format).
     * @var integer
     */
-    public $_num_format;
+    var $_num_format;
 
     /**
     * Bit specifying if formulas are hidden.
     * @var integer
     */
-    public $_hidden;
+    var $_hidden;
 
     /**
     * Bit specifying if the cell is locked.
     * @var integer
     */
-    public $_locked;
+    var $_locked;
 
     /**
     * The three bits specifying the text horizontal alignment.
     * @var integer
     */
-    public $_text_h_align;
+    var $_text_h_align;
 
     /**
     * Bit specifying if the text is wrapped at the right border.
     * @var integer
     */
-    public $_text_wrap;
+    var $_text_wrap;
 
     /**
     * The three bits specifying the text vertical alignment.
     * @var integer
     */
-    public $_text_v_align;
+    var $_text_v_align;
 
     /**
     * 1 bit, apparently not used.
     * @var integer
     */
-    public $_text_justlast;
+    var $_text_justlast;
 
     /**
     * The two bits specifying the text rotation.
     * @var integer
     */
-    public $_rotation;
+    var $_rotation;
 
     /**
     * The cell's foreground color.
     * @var integer
     */
-    public $_fg_color;
+    var $_fg_color;
 
     /**
     * The cell's background color.
     * @var integer
     */
-    public $_bg_color;
+    var $_bg_color;
 
     /**
     * The cell's background fill pattern.
     * @var integer
     */
-    public $_pattern;
+    var $_pattern;
 
     /**
     * Style of the bottom border of the cell
     * @var integer
     */
-    public $_bottom;
+    var $_bottom;
 
     /**
     * Color of the bottom border of the cell.
     * @var integer
     */
-    public $_bottom_color;
+    var $_bottom_color;
 
     /**
     * Style of the top border of the cell
     * @var integer
     */
-    public $_top;
+    var $_top;
 
     /**
     * Color of the top border of the cell.
     * @var integer
     */
-    public $_top_color;
+    var $_top_color;
 
     /**
     * Style of the left border of the cell
     * @var integer
     */
-    public $_left;
+    var $_left;
 
     /**
     * Color of the left border of the cell.
     * @var integer
     */
-    public $_left_color;
+    var $_left_color;
 
     /**
     * Style of the right border of the cell
     * @var integer
     */
-    public $_right;
+    var $_right;
 
     /**
     * Color of the right border of the cell.
     * @var integer
     */
-    public $_right_color;
+    var $_right_color;
 
     /**
     * Constructor
@@ -251,7 +249,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @param integer $index the XF index for the format.
     * @param array   $properties array with properties to be set on initialization.
     */
-    public function __construct($BIFF_version, $index = 0, $properties =  array())
+    function __construct($BIFF_version, $index = 0, $properties =  array())
     {
         $this->_xf_index       = $index;
         $this->_BIFF_version   = $BIFF_version;
@@ -314,7 +312,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @param string $style The type of the XF record ('style' or 'cell').
     * @return string The XF record
     */
-    public function getXf($style)
+    function getXf($style)
     {
         // Set the type of the XF record and some of the attributes.
         if ($style == 'style') {
@@ -446,7 +444,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     *
     * @return string The FONT record
     */
-    public function getFont()
+    function getFont()
     {
         $dyHeight   = $this->_size * 20;    // Height of font (1/20 of a point)
         $icv        = $this->_color;        // Index to color palette
@@ -502,7 +500,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     *
     * @return string A key for this font
     */
-    public function getFontKey()
+    function getFontKey()
     {
         $key  = "$this->_font_name$this->_size";
         $key .= "$this->_font_script$this->_underline";
@@ -518,7 +516,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     *
     * @return integer The index for the XF record
     */
-    public function getXfIndex()
+    function getXfIndex()
     {
         return($this->_xf_index);
     }
@@ -532,7 +530,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @param string $name_color name of the color (i.e.: 'blue', 'red', etc..). Optional.
     * @return integer The color index
     */
-    protected function _getColor($name_color = '')
+    function _getColor($name_color = '')
     {
         $colors = array(
                           'aqua'    => 0x07,
@@ -585,7 +583,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param string $location alignment for the cell ('left', 'right', etc...).
     */
-    public function setAlign($location)
+    function setAlign($location)
     {
         if (preg_match("/\d/",$location)) {
             return;                      // Ignore numbers
@@ -643,14 +641,14 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param string $location alignment for the cell ('left', 'right', etc...).
     */
-    public function setHAlign($location)
+    function setHAlign($location)
     {
         if (preg_match("/\d/",$location)) {
             return;                      // Ignore numbers
         }
-
+    
         $location = strtolower($location);
-
+    
         if ($location == 'left') {
             $this->_text_h_align = 1;
         }
@@ -683,14 +681,14 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param string $location alignment for the cell ('top', 'vleft', 'vright', etc...).
     */
-    public function setVAlign($location)
+    function setVAlign($location)
     {
         if (preg_match("/\d/",$location)) {
             return;                      // Ignore numbers
         }
-
+    
         $location = strtolower($location);
-
+ 
         if ($location == 'top') {
             $this->_text_v_align = 0;
         }
@@ -716,7 +714,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     *
     * @access public
     */
-    public function setMerge()
+    function setMerge()
     {
         $this->setAlign('merge');
     }
@@ -731,7 +729,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
                              1 maps to 700 (bold text). Valid range is: 100-1000.
                              It's Optional, default is 1 (bold).
     */
-    public function setBold($weight = 1)
+    function setBold($weight = 1)
     {
         if ($weight == 1) {
             $weight = 0x2BC;  // Bold text
@@ -759,7 +757,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param integer $style style of the cell border. 1 => thin, 2 => thick.
     */
-    public function setBottom($style)
+    function setBottom($style)
     {
         $this->_bottom = $style;
     }
@@ -770,7 +768,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param integer $style style of the cell top border. 1 => thin, 2 => thick.
     */
-    public function setTop($style)
+    function setTop($style)
     {
         $this->_top = $style;
     }
@@ -781,7 +779,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param integer $style style of the cell left border. 1 => thin, 2 => thick.
     */
-    public function setLeft($style)
+    function setLeft($style)
     {
         $this->_left = $style;
     }
@@ -792,7 +790,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param integer $style style of the cell right border. 1 => thin, 2 => thick.
     */
-    public function setRight($style)
+    function setRight($style)
     {
         $this->_right = $style;
     }
@@ -804,7 +802,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param integer $style style to apply for all cell borders. 1 => thin, 2 => thick.
     */
-    public function setBorder($style)
+    function setBorder($style)
     {
         $this->setBottom($style);
         $this->setTop($style);
@@ -824,7 +822,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @param mixed $color The color we are setting. Either a string (like 'blue'),
     *                     or an integer (range is [8...63]).
     */
-    public function setBorderColor($color)
+    function setBorderColor($color)
     {
         $this->setBottomColor($color);
         $this->setTopColor($color);
@@ -838,7 +836,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param mixed $color either a string (like 'blue'), or an integer (range is [8...63]).
     */
-    public function setBottomColor($color)
+    function setBottomColor($color)
     {
         $value = $this->_getColor($color);
         $this->_bottom_color = $value;
@@ -850,7 +848,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param mixed $color either a string (like 'blue'), or an integer (range is [8...63]).
     */
-    public function setTopColor($color)
+    function setTopColor($color)
     {
         $value = $this->_getColor($color);
         $this->_top_color = $value;
@@ -862,7 +860,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param mixed $color either a string (like 'blue'), or an integer (range is [8...63]).
     */
-    public function setLeftColor($color)
+    function setLeftColor($color)
     {
         $value = $this->_getColor($color);
         $this->_left_color = $value;
@@ -874,7 +872,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param mixed $color either a string (like 'blue'), or an integer (range is [8...63]).
     */
-    public function setRightColor($color)
+    function setRightColor($color)
     {
         $value = $this->_getColor($color);
         $this->_right_color = $value;
@@ -887,7 +885,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param mixed $color either a string (like 'blue'), or an integer (range is [8...63]).
     */
-    public function setFgColor($color)
+    function setFgColor($color)
     {
         $value = $this->_getColor($color);
         $this->_fg_color = $value;
@@ -902,7 +900,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param mixed $color either a string (like 'blue'), or an integer (range is [8...63]).
     */
-    public function setBgColor($color)
+    function setBgColor($color)
     {
         $value = $this->_getColor($color);
         $this->_bg_color = $value;
@@ -917,7 +915,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param mixed $color either a string (like 'blue'), or an integer (range is [8...63]).
     */
-    public function setColor($color)
+    function setColor($color)
     {
         $value = $this->_getColor($color);
         $this->_color = $value;
@@ -930,7 +928,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @param integer $arg Optional. Defaults to 1. Meaningful values are: 0-18,
     *                     0 meaning no background.
     */
-    public function setPattern($arg = 1)
+    function setPattern($arg = 1)
     {
         $this->_pattern = $arg;
     }
@@ -942,7 +940,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @param integer $underline The value for underline. Possible values are:
     *                          1 => underline, 2 => double underline.
     */
-    public function setUnderline($underline)
+    function setUnderline($underline)
     {
         $this->_underline = $underline;
     }
@@ -952,7 +950,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     *
     * @access public
     */
-    public function setItalic()
+    function setItalic()
     {
         $this->_italic = 1;
     }
@@ -963,7 +961,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param integer $size The font size (in pixels I think).
     */
-    public function setSize($size)
+    function setSize($size)
     {
         $this->_size = $size;
     }
@@ -973,7 +971,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     *
     * @access public
     */
-    public function setTextWrap()
+    function setTextWrap()
     {
         $this->_text_wrap = 1;
     }
@@ -985,7 +983,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @param integer $angle The rotation angle for the text (clockwise). Possible
                             values are: 0, 90, 270 and -1 for stacking top-to-bottom.
     */
-    public function setTextRotation($angle)
+    function setTextRotation($angle)
     {
         switch ($angle)
         {
@@ -1029,7 +1027,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @access public
     * @param integer $num_format The numeric format.
     */
-    public function setNumFormat($num_format)
+    function setNumFormat($num_format)
     {
         $this->_num_format = $num_format;
     }
@@ -1039,7 +1037,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     *
     * @access public
     */
-    public function setStrikeOut()
+    function setStrikeOut()
     {
         $this->_font_strikeout = 1;
     }
@@ -1049,7 +1047,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     *
     * @access public
     */
-    public function setOutLine()
+    function setOutLine()
     {
         $this->_font_outline = 1;
     }
@@ -1059,7 +1057,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     *
     * @access public
     */
-    public function setShadow()
+    function setShadow()
     {
         $this->_font_shadow = 1;
     }
@@ -1071,7 +1069,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @param integer $script The value for script type. Possible values are:
     *                        1 => superscript, 2 => subscript.
     */
-    public function setScript($script)
+    function setScript($script)
     {
         $this->_font_script = $script;
     }
@@ -1081,7 +1079,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
      *
      * @access public
      */
-     public function setLocked()
+     function setLocked()
      {
          $this->_locked = 1;
      }
@@ -1091,7 +1089,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     *
     * @access public
     */
-    public function setUnLocked()
+    function setUnLocked()
     {
         $this->_locked = 0;
     }
@@ -1103,8 +1101,9 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @param string $fontfamily The font family name. Possible values are:
     *                           'Times New Roman', 'Arial', 'Courier'.
     */
-    public function setFontFamily($font_family)
+    function setFontFamily($font_family)
     {
         $this->_font_name = $font_family;
     }
 }
+?>

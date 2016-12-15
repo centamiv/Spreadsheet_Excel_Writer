@@ -1,54 +1,46 @@
 {
-    "authors": [
-        {
-            "email": "cschmitz@limesurvey.org",
-            "name": "Carsten Schmitz",
-            "role": "Lead"
-        },
-        {
-            "email": "xnoguer@php.net",
-            "name": "Xavier Noguer",
-            "role": "Lead"
-        },
-        {
-            "email": "progi1984@gmail.com",
-            "name": "Franck Lefevre",
-            "role": "Developer"
-        },
-        {
-            "email": "tuupola@appelsiini.net",
-            "name": "Mika Tuupola",
-            "role": "Developer"
-        }
-    ],
-    "autoload": {
-        "psr-0": {
-            "Spreadsheet": ""
-        }
+  "authors": [
+    {
+      "email": "cschmitz@limesurvey.org",
+      "name": "Carsten Schmitz",
+      "role": "Lead"
     },
-    "autoload-dev": {
-        "psr-0": {
-            "Test": "test"
-        }
+    {
+      "email": "xnoguer@php.net",
+      "name": "Xavier Noguer",
+      "role": "Lead"
     },
-    "description": "More info available on: http://pear.php.net/package/Spreadsheet_Excel_Writer",
-    "include-path": [
-        "./"
-    ],
-    "license": "LGPL",
-    "minimum-stability": "dev",
-    "name": "pear/spreadsheet_excel_writer",
-    "support": {
-        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Spreadsheet_Excel_Writer",
-        "source": "https://github.com/pear/Spreadsheet_Excel_Writer"
+    {
+      "email": "progi1984@gmail.com",
+      "name": "Franck Lefevre",
+      "role": "Developer"
     },
-    "type": "library",
-    "require": {
-        "pear/pear": "*",
-        "pear/ole": "*",
-        "php": ">=5.3.3"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "*"
+    {
+      "email": "tuupola@appelsiini.net",
+      "name": "Mika Tuupola",
+      "role": "Developer"
     }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Spreadsheet": "",
+      "OLE": "./"
+    }
+  },
+  "description": "More info available on: http://pear.php.net/package/Spreadsheet_Excel_Writer",
+  "include-path": [
+    "./"
+  ],
+  "license": "LGPL",
+  "minimum-stability": "dev",
+  "name": "pear/spreadsheet_excel_writer",
+  "support": {
+    "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Spreadsheet_Excel_Writer",
+    "source": "https://github.com/pear/Spreadsheet_Excel_Writer"
+  },
+  "type": "library",
+  "require": {
+    "pear/pear": "*",
+    "php": ">=5.3.3"
+  },
 }
