@@ -1,43 +1,17 @@
 {
-  "authors": [
-    {
-      "email": "cschmitz@limesurvey.org",
-      "name": "Carsten Schmitz",
-      "role": "Lead"
-    },
-    {
-      "email": "xnoguer@php.net",
-      "name": "Xavier Noguer",
-      "role": "Lead"
-    },
-    {
-      "email": "progi1984@gmail.com",
-      "name": "Franck Lefevre",
-      "role": "Developer"
-    },
-    {
-      "email": "tuupola@appelsiini.net",
-      "name": "Mika Tuupola",
-      "role": "Developer"
-    }
-  ],
   "autoload": {
     "psr-0": {
-      "Spreadsheet": "",
-      "OLE": "./"
+      "Spreadsheet": "src/",
+      "OLE": "src_ole/"
     }
   },
-  "description": "More info available on: http://pear.php.net/package/Spreadsheet_Excel_Writer",
   "include-path": [
-    "./"
+    "src/",
+    "src_ole/"
   ],
+  "description": "",
   "license": "LGPL",
-  "minimum-stability": "dev",
-  "name": "centamiv/spreadsheet_excel_writer",
-  "support": {
-    "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Spreadsheet_Excel_Writer",
-    "source": "https://github.com/pear/Spreadsheet_Excel_Writer"
-  },
+  "name": "centamiv/spreadsheet_excel_writer_php7",
   "type": "library",
   "require": {
     "pear/pear": "*",
